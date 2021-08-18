@@ -44,17 +44,17 @@ end
 # c =  ComboDie.new([4 , 6, 6])
 # puts c.throw_all
 
-# sides = []
-# print "Enter number of dices"
-# number_of_dices = gets().chomp().to_i
-# sides << number_of_dices
-# number_of_dices.times.each do |i|
-# 	print "Enter sides of #{i+1} die"
-# 	sides << gets().chomp().to_i
-# end
+sides = []
+print "Enter number of dices"
+number_of_dices = gets().chomp().to_i
+sides << number_of_dices
+number_of_dices.times.each do |i|
+	print "Enter sides of #{i+1} die"
+	sides << gets().chomp().to_i
+end
 
-# c =  ComboDie.new(sides)
-# puts c.throw_all
+c =  ComboDie.new(sides)
+puts c.throw_all
 
 
 
