@@ -1,5 +1,8 @@
 require 'rspec'
 
+NUMBEROFDICES = 2
+ALLOWEDSIDES = [6, 8, 20]
+
 class Die
 	attr_accessor :sides
 
@@ -17,7 +20,6 @@ class Die
 end
 
 
-
 class ComboDie
 	def initialize(args)
 		@dices = []
@@ -28,53 +30,68 @@ class ComboDie
 
 	def throw_all
 		results = []
-		total = []
+		# total = []
 		for i in @dices
-			count = i.roll
-			total << count
-			results << [i.name ,  "result in " , count ].join(' ')
+			# count = i.roll
+			# total << count
+			# results << [i.name ,  "result in " , count ].join(' ')
+			results << i.roll
 		end
-		results << "total = #{total.sum}"
+		results << results.sum
 	end
 
 end
 
 
-
-# c =  ComboDie.new([4 , 6, 6])
+# c =  ComboDie.new([3 , 6, 6, 8])
 # puts c.throw_all
 
 sides = []
-print "Enter number of dices"
-number_of_dices = gets().chomp().to_i
+number_of_dices = 0
+loop do
+	print "Enter number of dices (allowed 1 or 2): "
+	number_of_dices = gets().chomp().to_i
+	break if(number_of_dices != 0 && number_of_dices <= NUMBEROFDICES )
+end
 sides << number_of_dices
-number_of_dices.times.each do |i|
-	print "Enter sides of #{i+1} die"
-	sides << gets().chomp().to_i
+
+loop do
+	print "Enter sides of #{sides.length} die (allowed #{ALLOWEDSIDES}): "
+	side = gets().chomp().to_i 
+	sides << side if ALLOWEDSIDES.include?(side)
+	break if (sides.length == sides[0] + 1)
 end
 
+
 c =  ComboDie.new(sides)
-puts c.throw_all
-
-
-
-
+p c.throw_all
 
 
 describe Die do 
-    context "when testing the Die class" do 
-      
-        it "should be be_between" do 
-	        d1 = Die.new(6) 
-	        message = d1.roll
-	        expect(message).to be_between(0, 6).inclusive
-        end
-      
-        it "should not be be_between" do 
-	        d2 = Die.new(6) 
-	        message = d2.roll
-	        expect(message).not_to be_between(7, 100).exclusive
-        end
 
-   end
+    context "when testing the 2 dices" do 
+    	c1 =  ComboDie.new([2 , 8, 8])
+		message1 =  c1.throw_all
+        it "should be be_between" do 
+	        expect(message1[0]).to be_between(1, 8)
+	        expect(message1[1]).to be_between(1, 8)
+	        expect(message1.last).to be_between(1, 16)
+        end
+        it "should not be be_between" do 
+	        expect(message1.last).not_to be(0)
+        end
+    end
+
+    context "when testing the 1 die" do 
+    	c2 =  ComboDie.new([1, 6])
+		message2 =  c2.throw_all
+        it "should be be_between" do 
+	        expect(message2.first).to be_between(1, 6)
+	        expect(message2.last).to be_between(1, 6)
+        end
+        it "should not be be_between" do 
+	        expect(message2.last).not_to be(0)
+        end
+    end
+
 end
